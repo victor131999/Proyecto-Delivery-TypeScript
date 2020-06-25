@@ -163,8 +163,8 @@ routes.get('/orders/:id/detailorders/:iddet',(req,res)=>{
 });
 
 //Actualizar los datos de una detailorders en especifico
-/*routes.patch('/orders/:id/detailorders/:iddet', async(req, res) => {
-    try{    
+routes.patch('/orders/:id/detailorders/:iddet', async(req, res) => {
+       
         const detailorder : detailorder = {
             datetime: new Date(),                
             description: req.body['description'],
@@ -173,14 +173,10 @@ routes.get('/orders/:id/detailorders/:iddet',(req,res)=>{
             ordertid: req.body['orderid']              
         }
         
-        const docUpdated = await firebaseHelper.firestore
-            .updateDocument(db, "detailorders", req.params.iddet, detailorder);
-        res.status(200).send(`Order with id ${docUpdated.req.params.iddet} was updated`);
-    }
-    catch(err){
-        res.status(400).send(`An error has ocurred ${err}`);
-    }
-});*/
+        db.collection(collection).doc(req.params.id).collection('detailorders').doc(req.params.iddet).set(detailorder)
+        .then(doc => res.status(200).send(`Order with id ${req.params.iddet} was updated`))
+        .catch(err => res.status(400).send(`An error has ocurred ${err}`));
+});
 
 //borrar una detailorders en especifico
 routes.delete('/orders/:id/detailorders/:iddet', async (req, res) => {
