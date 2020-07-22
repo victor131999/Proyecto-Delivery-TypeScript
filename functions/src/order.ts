@@ -1,28 +1,11 @@
 import * as main from './index';
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as Router from 'express';
+import { Order, detailorder, Message } from './models';
 
 const collection = "orders";
 const routes = Router();
 const db = main.db;
-
-interface Order {
-    datetime : Date
-    clientid : string
-    subtotal : number
-    typeiva: string
-    aumont:number
-    state:string
-}
-
-interface detailorder {
-    datetime : Date    
-    product:string
-    quantity : number
-    description : string
-    ordertid : string
-    //total:number
-}
 
 
  function getsubtotal(typeiva: string, aumont:number) {
@@ -34,69 +17,57 @@ interface detailorder {
     return aumont;
 }
 
-/*function getstate(state: string) {
-    if(state === "SI"){
-        return "delivered";
-    }else if(state === "NO"){
-        return  "Undelivered";
-    }
-    return "in process";
-}*/
-/*function gettotal(getsubtotal: number,quantity:number){
-    return getsubtotal*quantity;
-}*/
-
-
 
 routes.post('/orders', async (req, res) => {           
-    try{ 
+    try{            
         const newOrder : Order = {
-            datetime: new Date(),
-            clientid: req.body['clientid'],
             typeiva: req.body['typeiva'],
             aumont: req.body['aumont'],
             state: req.body['state'],
             subtotal: getsubtotal(req.body['typeiva'],req.body['aumont'])             
-        }
-        const OrderAdded = await firebaseHelper.firestore
-            .createNewDocument(db, collection, newOrder);
-        res.status(201).send(`Order was added to collection with id ${OrderAdded.id}`);
+        };      
+        const SubjectAdded = await firebaseHelper.firestore
+                                .createNewDocument(db, collection, newOrder);
+        res.status(201).json(Message('Orden agregada', 
+            `La orden se agregó a la colección con el id ${SubjectAdded.id}`, 
+            'success'));
     }
     catch(err){
-        res.status(400).send(`An error has ocurred ${err}`)
+        res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error'))
     }
 });
 
 routes.get('/orders', (req, res) =>{     
-    firebaseHelper.firestore.backup(db, collection)
-        .then(result => res.status(200).send(result))
-        .catch(err => res.status(400).send(`An error has ocurred ${err}`));
+    db.collection(collection).get()
+    .then(snapshot => {
+        res.status(200).json(snapshot.docs.map(doc => Order(doc.id, doc.data())))
+    })
+    .catch(err => res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error')));
 });
 
 
 routes.patch('/orders/:id', async(req, res) => {
     try{    
+        let id = req.params.id;
         const Order : Order = {
-            datetime: new Date(),
-            clientid: req.body['clientid'],
             typeiva: req.body['typeiva'],
             aumont: req.body['aumont'],
             state: req.body['state'],
             subtotal: getsubtotal(req.body['typeiva'],req.body['aumont'])               
         }
-        firebaseHelper.firestore
-            .updateDocument(db, collection, req.params.id, Order);
-        res.status(200).send(`Order with id ${req.params.id} was updated`);
-    }
+       await firebaseHelper.firestore
+            .updateDocument(db, collection, id, Order);
+            res.status(200).json(Message('Orden actualizada'
+            , `La orden con el id ${id} fue actualizada`
+            , 'success'));    }
     catch(err){
-        res.status(400).send(`An error has ocurred ${err}`);
-    }
+        res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error'))    }
 });
 
 routes.get('/orders/:id', (req,res)=>{    
     firebaseHelper.firestore.getDocument(db, collection, req.params.id)
-        .then(doc => res.status(200).send(doc))
-        .catch(err => res.status(400).send(`An error has ocurred ${err}`));
+        .then(doc => res.status(200).json(Order(doc.id,doc)))
+        .catch(err => res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error')));
 });
 
 
@@ -105,10 +76,11 @@ routes.delete('/orders/:id', async (req, res) => {
         let id = req.params.id;
         await firebaseHelper.firestore
             .deleteDocument(db, collection, id);
-        res.status(200).send(`Order was deleted ${id}`);
-    }
+        res.status(200).json(Message('Orden eliminada'
+        , `La orden con el id ${id} fue elimina`
+        , 'success'));    }
     catch(err){
-        res.status(400).send(`An error has ocurred ${err}`);
+        res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error'))
     }
 });
 

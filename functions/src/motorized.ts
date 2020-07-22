@@ -1,15 +1,12 @@
 import * as main from './index';
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as Router from 'express';
+import { Motorized,Message } from './models';
 
 const collection = "motorizeds";
 const routes = Router();
 const db = main.db;
 
-interface Motorized {
-    name? : string
-    vehicle? : string
-}
 
 routes.post('/motorizeds', async (req, res) => {           
     try{
@@ -19,17 +16,34 @@ routes.post('/motorizeds', async (req, res) => {
         }
         const MotorizedAdded = await firebaseHelper.firestore
             .createNewDocument(db, collection, newMotorized);
-        res.status(201).send(`Motorized was added to collection with id ${MotorizedAdded.id}`);
+        res.status(201).json(Message('Vehiculo agregado',`El vehiculo se agrego a la coleccion con el id ${MotorizedAdded.id}`,'success'));
     }
     catch(err){
-        res.status(400).send(`An error has ocurred ${err}`)
+        res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error'));
+    }
+});
+
+routes.put('/motorizeds/:id', async(req, res) => {
+    try{       
+        var id = req.params.id;
+        const motorized : Motorized = {
+            name: req.body['name'],
+            vehicle: req.body['vehicle']
+        }; 
+        await db.collection(collection).doc(id).update(motorized);
+        res.status(200).json(
+            Message('Vehiculo actualizado', `El vehiculo con el id ${id} fue actualizada correctamente`, 'success')
+        );
+    }
+    catch(err){
+        res.status(400).json(Message('Error', `Un error ha ocurrido ${err}`, 'error'));
     }
 });
 
 routes.get('/motorizeds/:id', (req,res)=>{    
     firebaseHelper.firestore.getDocument(db, collection, req.params.id)
-        .then(doc => res.status(200).send(doc))
-        .catch(err => res.status(400).send(`An error has ocurred ${err}`));
+        .then(doc => res.status(200).json(Motorized(doc.id,doc)))
+        .catch(err => res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error')));
 });
 
 routes.patch('/motorizeds/:id', async(req, res) => {
@@ -40,10 +54,10 @@ routes.patch('/motorizeds/:id', async(req, res) => {
         }
         const docUpdated = await firebaseHelper.firestore
             .updateDocument(db, collection, req.params.id, Motorized);
-        res.status(200).send(`Motorized with id ${docUpdated.id} was updated`);
+        res.status(200).json(Message('Vehiculo actualizado',`El vehiculo  con el id ${docUpdated.id} se actualizo`,'success'));
     }
     catch(err){
-        res.status(400).send(`An error has ocurred ${err}`);
+        res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error'));
     }
 });
 
@@ -52,17 +66,18 @@ routes.delete('/motorizeds/:id', async (req, res) => {
         let id = req.params.id;
         await firebaseHelper.firestore
             .deleteDocument(db, collection, id);
-        res.status(200).send(`Motorized was deleted ${id}`);
+        res.status(200).json(Message('Vehiculo eliminado',`El vehiculo  con el id ${id} se elimino`,'success'));
     }
     catch(err){
-        res.status(400).send(`An error has ocurred ${err}`);
+        res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error'));
     }
 });
 
 routes.get('/motorizeds', (req, res) =>{     
-    firebaseHelper.firestore.backup(db, collection)
-        .then(result => res.status(200).send(result))
-        .catch(err => res.status(400).send(`An error has ocurred ${err}`));
-});
+    db.collection(collection).get()
+        .then(snapshot => {           
+            res.status(200).json(snapshot.docs.map(doc => Motorized(doc.id, doc.data())));
+        }).catch(err => res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error')));
+    });
 
 export { routes };
