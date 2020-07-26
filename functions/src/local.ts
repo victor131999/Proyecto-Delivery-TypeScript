@@ -72,11 +72,24 @@ routes.delete('/locals/:id', async (req, res) => {
     }
 });
 
-routes.get('/locals', (req, res) =>{     
-    db.collection(collection).get()
+routes.get('/locals', (req, res) =>{ 
+    db.collection(collection).orderBy('name')
+    .get()
         .then(snapshot => {           
             res.status(200).json(snapshot.docs.map(doc => Local(doc.id, doc.data())));
         }).catch(err => res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error')));
+        
     });
+
+routes.get('/locals/:limit/:last', (req, res) =>{ 
+    let limit= parseInt(req.params.limit);
+    let last=parseInt(req.params.last);
+    const pageThree = db.collection(collection).limit(limit).offset(last);
+    pageThree.get()
+    .then(snapshot => {           
+        res.status(200).json(snapshot.docs.map(doc => Local(doc.id, doc.data())));
+    }).catch(err => res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error')));
+    
+});
 
 export { routes };
