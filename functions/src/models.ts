@@ -1,23 +1,21 @@
 
-export interface Client {
-    idclient? : string,
-    name? : string,
-    direction? : string,
-    identy? : string,
-    active? : string,
-    phone? : string
+export interface Customer {
+    idcustomer? : string,
+    name : string,
+    direction : string,
+    identy : string,
+    active : string,
+    phone : string
 }
 
-export function Client(data:any, id?: string){
-    const {  name,direction, identy, active, phone } = data;
-
-    let object:Client={
-        idclient: id,
-        name: name === undefined ?  null : name,
-        direction: direction === undefined ?  null : direction,
-        identy:identy === undefined ?  null : identy,
-        active:active === undefined ?  null : active,
-        phone:phone === undefined ?  null : phone
+export function Customer(id:string, data: any){
+    let object:Customer={
+        idcustomer: id,
+        name: data.name,
+        direction:data.direction,
+        identy:data.identy,
+        active:data.active,
+        phone:data.phone,
     };
     return object;
 }
@@ -105,7 +103,7 @@ export interface Bill {
     quantity:number,
     total: number,
     order?: Order,
-    client?: Client
+    customer?: Customer
 }
 
 export function Bill(id: string, data :any){    
@@ -119,7 +117,7 @@ export function Bill(id: string, data :any){
         quantity:data.quantity,
         total: data.total,
         order : Order(data.order.id, data.order),
-        client :Client(data.client, data.client.id)
+        customer :Customer(data.customer, data.customer.id)
     };    
     return object;
 }

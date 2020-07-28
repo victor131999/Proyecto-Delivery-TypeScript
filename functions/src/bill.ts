@@ -2,7 +2,7 @@
 import * as main from './index';
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as Router from 'express';
-import { Bill, Order, Client } from './models';
+import { Bill} from './models';
 
 const routes = Router();
 const db = main.db;
@@ -14,7 +14,7 @@ async function getTotal(quantity:number, oid:string){
            return  quantity*order.subtotal;
 }
 
-routes.post('/bills', async (req, res) => {           
+/*routes.post('/bills', async (req, res) => {           
     try{      
         let costValue = await getTotal(req.body['quantity'], req.body['orderid']);
         
@@ -42,7 +42,7 @@ routes.post('/bills', async (req, res) => {
     catch(err){
         res.status(400).send(`An error has ocurred ${err}`)
     }
-});
+});*/
 
 routes.get('/bills/:id', (req,res)=>{    
     firebaseHelper.firestore
