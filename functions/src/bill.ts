@@ -90,8 +90,8 @@ routes.get('/bills', (req, res) =>{
 });
 
 
-routes.get('/customers/:id/bills', (req, res) =>{            
-    db.collection(collection).where('customerid','==',req.params.id).get()
+routes.get('/orders/:id/bills', (req, res) =>{            
+    db.collection(collection).where('orderid','==',req.params.id).get()
     .then(snapshot => res.status(200).json(snapshot.docs.map(doc => Bill(doc.id, doc.data())))
     ).catch(err => res.status(400).send(`An error has ocurred ${err}`));;         
     
