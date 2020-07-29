@@ -2,7 +2,7 @@
 import * as main from './index';
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as Router from 'express';
-import { Bill} from './models';
+import { Bill,Customer,Order} from './models';
 
 const routes = Router();
 const db = main.db;
@@ -14,27 +14,27 @@ async function getTotal(quantity:number, oid:string){
            return  quantity*order.subtotal;
 }
 
-/*routes.post('/bills', async (req, res) => {           
+routes.post('/bills', async (req, res) => {           
     try{      
         let costValue = await getTotal(req.body['quantity'], req.body['orderid']);
         
         const newBill : Bill = {
             date: new Date().toUTCString(), //Obtiene la fecha del servidor
-            clientid: req.body['clientid'],
-            orderid: req.body['orderid'],
+            orderid: req.body['orderid'],            
+            customerid: req.body['customerid'],
             product: req.body['product'],
             description: req.body['description'],
             quantity: req.body['quantity'],
             total: costValue
         };    
         //Consulta la orden de la colección 'orders'
-        const order = await db.collection("orders").doc(req.body['orderid']).get();
+        const customer = await db.collection("customers").doc(req.body['customerid']).get();
         //Agrega la orden al objecto 'newBill'
-        newBill.order = Order(order.id, order.data());
+        newBill.customer = Customer(customer.id, customer.data());
         //Consulta la persona de la colección 'customers'
-        const client = await db.collection("customers").doc(req.body['clientid']).get();
+        const order = await db.collection("orders").doc(req.body['orderid']).get();
         //Agrega la persona al objecto 'newBill'
-        newBill.client = Client(client.data(), client.id);
+        newBill.order = Order(order.data(), order.id);
 
         const id = (await db.collection(collection).add(newBill)).id;                
         res.status(201).send(`Registration was added to collection with id ${id}`);
@@ -42,7 +42,7 @@ async function getTotal(quantity:number, oid:string){
     catch(err){
         res.status(400).send(`An error has ocurred ${err}`)
     }
-});*/
+});
 
 routes.get('/bills/:id', (req,res)=>{    
     firebaseHelper.firestore
@@ -57,7 +57,7 @@ routes.patch('/bills/:id', async(req, res) => {
         let id = req.params.id;
         const bill : Bill = {
             date: new Date().toUTCString(), //Obtiene la fecha del servidor
-            clientid: req.body['clientid'],
+            customerid: req.body['customerid'],
             orderid: req.body['orderid'],
             product: req.body['product'],
             description: req.body['description'],
@@ -91,7 +91,7 @@ routes.get('/bills', (req, res) =>{
 
 
 routes.get('/customers/:id/bills', (req, res) =>{            
-    db.collection(collection).where('clientid','==',req.params.id).get()
+    db.collection(collection).where('customerid','==',req.params.id).get()
     .then(snapshot => res.status(200).json(snapshot.docs.map(doc => Bill(doc.id, doc.data())))
     ).catch(err => res.status(400).send(`An error has ocurred ${err}`));;         
     

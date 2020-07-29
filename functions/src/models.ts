@@ -72,13 +72,14 @@ export interface Order {
     aumont:number,
     state:string
 }
-export function Order(id:string,data:any){
+export function Order(data:any,id?:string){
+    const {subtotal,typeiva,aumont,state}=data
     let object :Order={
         idorder:id,
-        subtotal:data.subtotal,
-        typeiva:data.typeiva,
-        aumont:data.aumont,
-        state:data.state
+        subtotal:subtotal === undefined ?  null : subtotal,
+        typeiva:typeiva === undefined ?  null : typeiva,
+        aumont:aumont === undefined ?  null : aumont,
+        state:state === undefined ?  null : state,
     };
     return object;
 }
@@ -96,7 +97,7 @@ export interface detailorder {
 export interface Bill {
     idbill? :string,
     date: string,
-    clientid: string,
+    customerid: string,
     orderid: string,
     product: string,
     description:string,
@@ -110,14 +111,14 @@ export function Bill(id: string, data :any){
     let object :Bill = { 
         idbill: id,
         date: data.date,
-        clientid: data.clientid,
         orderid: data.ordertid,
+        customerid: data.customerid,
         product: data.product,
         description:data.description,
         quantity:data.quantity,
         total: data.total,
-        order : Order(data.order.id, data.order),
-        customer :Customer(data.customer, data.customer.id)
+        customer :Customer(data.customer.id,data.customer),
+        order : Order(data.order,data.order.id)
     };    
     return object;
 }

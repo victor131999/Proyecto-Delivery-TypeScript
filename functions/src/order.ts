@@ -40,7 +40,7 @@ routes.post('/orders', async (req, res) => {
 routes.get('/orders', (req, res) =>{     
     db.collection(collection).get()
     .then(snapshot => {
-        res.status(200).json(snapshot.docs.map(doc => Order(doc.id, doc.data())))
+        res.status(200).json(snapshot.docs.map(doc => Order(doc.data(),doc.id)))
     })
     .catch(err => res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error')));
 });
@@ -64,12 +64,33 @@ routes.patch('/orders/:id', async(req, res) => {
         res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error'))    }
 });
 
-routes.get('/orders/:id', (req,res)=>{    
-    firebaseHelper.firestore.getDocument(db, collection, req.params.id)
-        .then(doc => res.status(200).json(Order(doc.id,doc)))
-        .catch(err => res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error')));
+routes.put('/orders/:id', (req, res) => {        
+    var id = req.params.id;
+    const order = Order(req.body, id);
+    console.log("Actualizando orden");
+    console.log(order);
+    console.log(id);
+    firebaseHelper.firestore.updateDocument(db, collection, id, order).then(
+        result => {
+            res.status(200).json(
+                Message('Orden actualizada', `Orden con el id ${id} fue actualizada correctamente`, 'success')
+            )
+        }).catch(err => {
+    res.status(400).json(Message('Error', `Un error ha ocurrido ${err}`, 'error'));
+});
 });
 
+
+routes.get('/orders/:id', (req,res)=>{    
+    firebaseHelper.firestore
+        .getDocument(db, collection, req.params.id)
+        .then(doc => {
+                let orderQuery = Order(doc, doc.id);
+                console.log(orderQuery);
+                res.status(200).json(orderQuery);
+            })
+        .catch(err => res.status(400).json({message: `An error has ocurred ${err}`}));    
+});
 
 routes.delete('/orders/:id', async (req, res) => {
     try{        
