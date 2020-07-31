@@ -16,7 +16,7 @@ async function getTotal(quantity:number, oid:string){
 
 routes.post('/bills', async (req, res) => {           
     try{      
-        let costValue = await getTotal(req.body['quantity'], req.body['orderid']);
+        let costValue = await getTotal(req.body['quantity'], req.body['customerid']);
         
         const newBill : Bill = {
             date: new Date().toUTCString(), //Obtiene la fecha del servidor
@@ -53,7 +53,7 @@ routes.get('/bills/:id', (req,res)=>{
 
 routes.patch('/bills/:id', async(req, res) => {
     try{       
-        let costValue = await getTotal(req.body['idbill'], req.body['ordertid']);
+        let costValue = await getTotal(req.body['quantity'], req.body['customerid']);
         let id = req.params.id;
         const bill : Bill = {
             date: new Date().toUTCString(), //Obtiene la fecha del servidor
