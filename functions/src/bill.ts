@@ -16,7 +16,7 @@ async function getTotal(quantity:number, oid:string){
 
 routes.post('/bills', async (req, res) => {           
     try{      
-        let costValue = await getTotal(req.body['quantity'], req.body['customerid']);
+        let costTotal = await getTotal(req.body['quantity'], req.body['orderid']);
         
         const newBill : Bill = {
             date: new Date().toUTCString(), //Obtiene la fecha del servidor
@@ -25,7 +25,7 @@ routes.post('/bills', async (req, res) => {
             product: req.body['product'],
             description: req.body['description'],
             quantity: req.body['quantity'],
-            total: costValue
+            total: costTotal
         };    
         //Consulta la orden de la colección 'orders'
         const customer = await db.collection("customers").doc(req.body['customerid']).get();
@@ -96,5 +96,7 @@ routes.get('/orders/:id/bills', (req, res) =>{
     ).catch(err => res.status(400).send(`An error has ocurred ${err}`));;         
     
 });
+
+
 
 export { routes };

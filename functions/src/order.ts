@@ -104,7 +104,6 @@ routes.delete('/orders/:id', async (req, res) => {
         res.status(400).json(Message('Un error ha ocurrido', `${err}`, 'error'))
     }
 });
-
 //-------------------------------------------------------------------------
 
 // -----------GRUDS de las subcollection en este caso detailorders---------------
