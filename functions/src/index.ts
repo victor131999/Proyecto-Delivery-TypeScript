@@ -23,8 +23,8 @@ main.use(bodyParser.json());
 main.use(bodyParser.urlencoded({extended: false}));
 main.use('/api', require('./client').routes);
 main.use('/api', require('./order').routes);
-main.use('/api', require('./routes/local').routes);
-main.use('/api', require('./routes/motorized').routes);
+main.use('/api', require('./local').routes);
+main.use('/api', require('./motorized').routes);
 main.use('/api', require('./bill').routes);
 
 export const api = functions.https.onRequest(main);
