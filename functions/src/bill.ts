@@ -19,7 +19,7 @@ routes.post('/bills', async (req, res) => {
         let costTotal = await getTotal(req.body['quantity'], req.body['orderid']);
         
         const newBill : Bill = {
-            date: new Date().toUTCString(), //Obtiene la fecha del servidor
+            date: new Date().toUTCString(), 
             orderid: req.body['orderid'],            
             customerid: req.body['customerid'],
             product: req.body['product'],

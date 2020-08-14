@@ -23,28 +23,30 @@ export function Customer(id:string, data: any){
 
 export interface Local {
     idlocal?:string;
-    name? : string
-    direction? : string
+    name : string
+    direction : string
 }
-export function Local(id:string, data:any){
+export function Local(data:any,id?:string){
+    const { name,direction } = data;
     let object:Local={
         idlocal:id,
-        name:data.name,
-        direction:data.direction,
+        name:name,
+        direction:direction
     };
     return object;
 }
 
 export interface Motorized {
     idmotorized?:string;
-    name? : string
-    vehicle? : string
+    name : string;
+    vehicle : string
 }
-export function Motorized(id:string, data:any){
+export function Motorized( data:any,id?:string){
+    const { name,vehicle } = data;
     let object:Motorized={
         idmotorized:id,
-        name:data.name,
-        vehicle:data.vehicle,
+        name:name,
+        vehicle:vehicle
     };
     return object;
 }

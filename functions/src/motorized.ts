@@ -9,30 +9,12 @@ const db = main.db;
 
 
 routes.post('/motorizeds', async (req, res) => {           
-    try{
-        const newMotorized: Motorized = {
-            name: req.body['name'],
-            vehicle: req.body['vehicle']
-        }
-        const MotorizedAdded = await firebaseHelper.firestore
-            .createNewDocument(db, collection, newMotorized);
-        res.status(201).json(Message('Vehiculo agregado',`El vehiculo se agrego a la coleccion con el id ${MotorizedAdded.id}`,'success'));
-    }
-    catch(err){
-        res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error'));
-    }
-});
-
-routes.put('/motorizeds/:id', async(req, res) => {
-    try{       
-        var id = req.params.id;
-        const motorized : Motorized = {
-            name: req.body['name'],
-            vehicle: req.body['vehicle']
-        }; 
-        await db.collection(collection).doc(id).update(motorized);
-        res.status(200).json(
-            Message('Vehiculo actualizado', `El vehiculo con el id ${id} fue actualizada correctamente`, 'success')
+    try{            
+        const newMotorized = Motorized(req.body);
+        const motorizedAdded = await firebaseHelper.firestore
+        .createNewDocument(db, collection, newMotorized);
+        res.status(201).json(
+            Message('Vehiculo agregado', `El vehiculo fue agregado con el id ${motorizedAdded.id}`, 'success')
         );
     }
     catch(err){
@@ -40,26 +22,30 @@ routes.put('/motorizeds/:id', async(req, res) => {
     }
 });
 
-routes.get('/motorizeds/:id', (req,res)=>{    
-    firebaseHelper.firestore.getDocument(db, collection, req.params.id)
-        .then(doc => res.status(200).json(Motorized(doc.id,doc)))
-        .catch(err => res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error')));
+routes.put('/motorizeds/:id', (req, res) => {        
+    var id = req.params.id;
+    const motorized = Motorized(req.body, id);        
+    firebaseHelper.firestore.updateDocument(db, collection, id, motorized).then(
+        result => {
+            res.status(200).json(
+                Message('Vehiculo actualizado', `El vehiculo con el id ${id} fue actualizado correctamente`, 'success')
+            )
+        }).catch(err => {
+    res.status(400).json(Message('Error', `Un error ha ocurrido ${err}`, 'error'));
+});
 });
 
-routes.patch('/motorizeds/:id', async(req, res) => {
-    try{    
-        const Motorized : Motorized = {
-            name: req.body['name'],
-            vehicle: req.body['vehicle']
-        }
-        const docUpdated = await firebaseHelper.firestore
-            .updateDocument(db, collection, req.params.id, Motorized);
-        res.status(200).json(Message('Vehiculo actualizado',`El vehiculo  con el id ${docUpdated.id} se actualizo`,'success'));
-    }
-    catch(err){
-        res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error'));
-    }
+routes.get('/motorizeds/:id', (req,res)=>{    
+    firebaseHelper.firestore
+        .getDocument(db, collection, req.params.id)
+        .then(doc => {
+                let motorizedQuery = Motorized(doc, doc.id);
+                console.log(motorizedQuery);
+                res.status(200).json(motorizedQuery);
+            })
+        .catch(err => res.status(400).json({message: `An error has ocurred ${err}`}));    
 });
+
 
 routes.delete('/motorizeds/:id', async (req, res) => {
     try{        
@@ -73,19 +59,12 @@ routes.delete('/motorizeds/:id', async (req, res) => {
     }
 });
 
-routes.get('/motorizeds', (req, res) =>{     
-    db.collection(collection).get()
-        .then(snapshot => {           
-            res.status(200).json(snapshot.docs.map(doc => Motorized(doc.id, doc.data())));
-        }).catch(err => res.status(400).json(Message('Un error ha ocurrido',`${err}`,'error')));
-});
-
 routes.get('/motorizeds/:page/:limit', (req, res) => {        
     let page = parseInt(req.params.page);
     let limit = parseInt(req.params.limit);
     let avoid = page == 1 ? 0 : (page - 1) * limit;
     db.collection(collection).orderBy('name').offset(avoid).limit(limit).get()        
-        .then(snapshot => res.status(200).json(snapshot.docs.map(doc => Motorized(doc.id,doc.data()))))
+        .then(snapshot => res.status(200).json(snapshot.docs.map(doc => Motorized(doc.data(),doc.id))))
         .catch(err => res.status(400).send(`An error has ocurred ${err}`)); 
 });
 
