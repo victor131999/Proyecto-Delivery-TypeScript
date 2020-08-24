@@ -1,4 +1,4 @@
-
+//------------------------------Modelo de orden----------------------------------------//
 export interface Customer {
     idcustomer? : string,
     name : string,
@@ -19,8 +19,9 @@ export function Customer(id:string, data: any){
     };
     return object;
 }
+//-------------------------------------------------------------------------------------//
 
-
+//------------------------------Modelo de local----------------------------------------//
 export interface Local {
     idlocal?:string;
     name : string
@@ -35,7 +36,9 @@ export function Local(data:any,id?:string){
     };
     return object;
 }
+//-------------------------------------------------------------------------------------//
 
+//------------------------------Modelo de Motorized----------------------------------------//
 export interface Motorized {
     idmotorized?:string;
     name : string;
@@ -51,7 +54,9 @@ export function Motorized( data:any,id?:string){
     return object;
 }
 
+//-------------------------------------------------------------------------------------//
 
+//------------------------------Modelo de Message----------------------------------------//
 export interface Message {
     tittle: string;
     text:string;
@@ -66,7 +71,9 @@ let message : Message={
 return message;
 }
 
+//-------------------------------------------------------------------------------------//
 
+//------------------------------Modelo de order----------------------------------------//
 export interface Order {
     idorder?:string,
     subtotal : number,
@@ -86,16 +93,9 @@ export function Order(data:any,id?:string){
     return object;
 }
 
-export interface detailorder {
-    datetime : Date    
-    product:string
-    quantity : number
-    description : string
-    ordertid : string
-    //total:number
-}
+//-------------------------------------------------------------------------------------//
 
-/*============ Facturas ============*/
+//------------------------------Modelo de Bill----------------------------------------//
 export interface Bill {
     idbill? :string,
     date: string,
@@ -124,3 +124,24 @@ export function Bill(id: string, data :any){
     };    
     return object;
 }
+//-------------------------------------------------------------------------------------//
+
+//------------------------------Modelo de Product----------------------------------------//
+export interface Product {
+    idproduct?:string,
+    name : string,
+    brand:string,
+    description:string
+}
+export function Product(data:any,id?:string){
+    const { name,description,brand} = data;
+    let object:Product={
+        idproduct:id,
+        name:name,
+        brand:brand,
+        description:description
+
+    };
+    return object;
+}
+//-------------------------------------------------------------------------------------//

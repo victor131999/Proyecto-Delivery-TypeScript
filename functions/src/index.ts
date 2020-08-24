@@ -26,6 +26,7 @@ main.use('/api', require('./order').routes);
 main.use('/api', require('./local').routes);
 main.use('/api', require('./motorized').routes);
 main.use('/api', require('./bill').routes);
+main.use('/api', require('./product').routes);
 
 export const api = functions.https.onRequest(main);
 export { db };//exportacion de la base de datos

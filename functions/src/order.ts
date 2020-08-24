@@ -1,7 +1,7 @@
 import * as main from './index';
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as Router from 'express';
-import { Order, detailorder, Message } from './models';
+import { Order, Message } from './models';
 
 const collection = "orders";
 const routes = Router();
@@ -105,81 +105,5 @@ routes.delete('/orders/:id', async (req, res) => {
     }
 });
 //-------------------------------------------------------------------------
-
-// -----------GRUDS de las subcollection en este caso detailorders---------------
-//Crear una subcollection
-routes.post('/orders/:id/detailorders',  (req, res) => {
-    let OrderRef = db.collection(collection).doc(req.params.id);
-    const newdetailorder : detailorder = {
-        datetime: new Date(),                
-        description: req.body['description'],
-        //description: getstate(req.body['state']),
-        quantity: req.body['quantity'],
-        product: req.body['product'],
-        ordertid: req.body['orderid'],
-       // total: req.body['total']
-        //total:gettotal(req.body['getsubtotal'],req.body['quantity'])
-        
-    }
-    OrderRef.collection('detailorders').add(newdetailorder)
-    .then(detailorderAdded => {
-        res.status(201).send(`Order's detailorder was added to collection with id ${detailorderAdded.id}`);    
-    }).catch(err => { res.status(400).send(`An error has ocurred ${err}`) })
-    
-});
-
-
-//opcional, muestra los datos de orders y detailorders a la vez
-routes.get('/orders/and/detailorders',(req,res)=>{   
-    firebaseHelper.firestore.backup(db, collection, "detailorders")
-        .then(doc => res.status(200).send(doc))
-        .catch(err => res.status(400).send(`An error has ocurred ${err}`));
-});
-//--------------------------------------------------------------------------------
-
-//Listar las detailorders
-routes.get('/orders/:id/detailorders',(req,res)=>{   
-    var detaillist= db.collection(collection).doc(req.params.id).collection('detailorders');
-    detaillist.get().then(list =>{
-        res.status(201).send(list.docs.map(doc=>doc.data()))
-    }).catch(err => res.status(400).send(`An error has ocurred ${err}`));
-});
-
-
-//Llamar a una detailorders en especifico por su id
-routes.get('/orders/:id/detailorders/:iddet',(req,res)=>{   
-    var or= db.collection(collection).doc(req.params.id).collection('detailorders').doc(req.params.iddet);
-    or.get().then(doc =>{
-        res.status(201).send(doc.data())
-    })
-});
-
-//Actualizar los datos de una detailorders en especifico
-routes.patch('/orders/:id/detailorders/:iddet', async(req, res) => {
-       
-        const detailorder : detailorder = {
-            datetime: new Date(),                
-            description: req.body['description'],
-            quantity: req.body['quantity'],
-            product: req.body['product'],
-            ordertid: req.body['orderid']              
-        }
-        
-        db.collection(collection).doc(req.params.id).collection('detailorders').doc(req.params.iddet).set(detailorder)
-        .then(doc => res.status(200).send(`Order with id ${req.params.iddet} was updated`))
-        .catch(err => res.status(400).send(`An error has ocurred ${err}`));
-});
-
-//borrar una detailorders en especifico
-routes.delete('/orders/:id/detailorders/:iddet', async (req, res) => {
-    try{        
-        await firebaseHelper.firestore
-            .deleteDocumentFromSubcollection(db, collection,req.params.id,"detailorders",req.params.iddet);
-        res.status(200).send(`Order was deleted ${req.params.iddet}`);
-    }
-    catch(err){
-        res.status(400).send(`An error has ocurred ${err}`);
-    }
-});
 
 export { routes };
