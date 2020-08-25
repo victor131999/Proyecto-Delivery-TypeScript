@@ -21,6 +21,7 @@ const main = express();
 main.use(cors());
 main.use(bodyParser.json());
 main.use(bodyParser.urlencoded({extended: false}));
+main.use('/api', require('./auth').routes);
 main.use('/api', require('./client').routes);
 main.use('/api', require('./order').routes);
 main.use('/api', require('./local').routes);
