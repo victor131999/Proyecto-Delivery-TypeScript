@@ -27,13 +27,13 @@ routes.post('/bills', async (req, res) => {
             quantity: req.body['quantity'],
             total: costTotal
         };    
-        //Consulta la orden de la colección 'orders'
+        //Consulta del cliente de la colección 'customers'
         const customer = await db.collection("customers").doc(req.body['customerid']).get();
-        //Agrega la orden al objecto 'newBill'
+        //Agrega la cliente orden al objecto 'newBill'
         newBill.customer = Customer(customer.id, customer.data());
-        //Consulta la persona de la colección 'customers'
+        //Consulta la orden de la colección 'orders'
         const order = await db.collection("orders").doc(req.body['orderid']).get();
-        //Agrega la persona al objecto 'newBill'
+        //Agrega la orden al objecto 'newBill'
         newBill.order = Order(order.data(), order.id);
 
         const id = (await db.collection(collection).add(newBill)).id;                
