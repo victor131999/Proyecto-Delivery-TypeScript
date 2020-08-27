@@ -1,6 +1,7 @@
 import * as Router from 'express';
 import * as admin from 'firebase-admin';
-import { Message } from './models';
+import { Message } from '../models/message';
+
 
 
 const routes = Router();
