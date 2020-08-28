@@ -23,7 +23,7 @@ export async function retrieveLocal(req: Request, res: Response) {
         if(!doc) {
             return res.status(404).json(Message('Local no encontrada', `Local con el id ${req.params.id} no encontrada`, 'warning'));               
         }        
-        return res.status(200).json(Local(doc, doc.id));
+        return res.status(200).json(Local(doc.data(), doc.id));
     }
     catch(err){
         return handleError(res, err);

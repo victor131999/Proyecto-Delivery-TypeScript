@@ -23,7 +23,7 @@ export async function retrieveProduct(req: Request, res: Response) {
         if(!doc) {
             return res.status(404).json(Message('Producto no encontrada', `Producto con el id ${req.params.id} no encontrada`, 'warning'));               
         }        
-        return res.status(200).json(Product(doc, doc.id));
+        return res.status(200).json(Product(doc.data(), doc.id));
     }
     catch(err){
         return handleError(res, err);

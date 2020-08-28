@@ -33,7 +33,7 @@ export async function retrieveCharge(req: Request, res: Response) {
         if(!doc) {
             return res.status(404).json(Message('charge no encontrada', `chargeo con el id ${req.params.id} no encontrada`, 'warning'));               
         }        
-        return res.status(200).json(Charge(doc, doc.id));
+        return res.status(200).json(Charge(doc.data(), doc.id));
     }
     catch(err){
         return handleError(res, err);
