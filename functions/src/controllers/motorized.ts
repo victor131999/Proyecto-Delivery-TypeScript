@@ -56,7 +56,7 @@ export async function listMotorized(req: Request, res: Response) {
         let page = parseInt(req.params.page);
         let limit = parseInt(req.params.limit);
         let avoid = page == 1 ? 0 : (page - 1) * limit;
-        let snapshot = await db.collection(collection).orderBy('name').offset(avoid).limit(limit).get();
+        let snapshot = await db.collection(collection).orderBy('brand').offset(avoid).limit(limit).get();
         return res.status(200).json(snapshot.docs.map(doc => Motorized(doc.data(), doc.id)));        
     } catch (err) {
         return handleError(res, err);
