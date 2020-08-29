@@ -1,6 +1,6 @@
 import {Application} from 'express';
-import { createCustomer, retrieveCustomer, updateCustomer, deleteCustomer, countCustomer, listCustomer } from './controllers/customer';
-import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, countMotorized, listMotorized } from './controllers/motorized';
+import { createCustomer, retrieveCustomer, updateCustomer, deleteCustomer, countCustomer, listCustomer,ComboCustomer } from './controllers/customer';
+import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, countMotorized, listMotorized,ComboMotorized } from './controllers/motorized';
 import { createLocal, retrieveLocal, updateLocal, deleteLocal, countLocal, listLocal } from './controllers/local';
 import { createProduct, retrieveProduct, updateProduct, deleteProduct, countProduct, listProduct } from './controllers/product';
 import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge } from './controllers/charge';
@@ -12,6 +12,7 @@ export function routesCustomer(app: Application) {
     app.delete('/api/customers/:id', deleteCustomer);
     app.get('/api/count/customers', countCustomer);
     app.get('/api/page/customers/:page/:limit', listCustomer);
+    app.get('/api/customers', ComboCustomer);
 }
 
 export function routesMotorized(app: Application) {
@@ -21,6 +22,7 @@ export function routesMotorized(app: Application) {
     app.delete('/api/motorizeds/:id', deleteMotorized);
     app.get('/api/count/motorizeds', countMotorized);
     app.get('/api/page/motorizeds/:page/:limit', listMotorized);
+    app.get('/api/motorizeds', ComboMotorized);
 }
 
 export function routesLocal(app: Application) {

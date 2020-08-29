@@ -72,6 +72,15 @@ export async function countMotorized(req: Request, res: Response) {
     }
 }
 
+export async function ComboMotorized(req: Request, res: Response){
+    try {
+
+        let snapshot = await db.collection(collection).orderBy('brand').get();
+        return res.status(200).json(snapshot.docs.map(doc => Motorized(doc.data(), doc.id)));        
+    } catch (err) {
+        return handleError(res, err);
+    }
+}
 
 function handleError(res: Response, err: any) {
     return res.status(500).send({ message: `${err.code} - ${err.message}` });
