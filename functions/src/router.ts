@@ -2,7 +2,7 @@ import {Application} from 'express';
 import { createCustomer, retrieveCustomer, updateCustomer, deleteCustomer, countCustomer, listCustomer,ComboCustomer } from './controllers/customer';
 import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, countMotorized, listMotorized,ComboMotorized } from './controllers/motorized';
 import { createLocal, retrieveLocal, updateLocal, deleteLocal, countLocal, listLocal } from './controllers/local';
-import { createProduct, retrieveProduct, updateProduct, deleteProduct, countProduct, listProduct } from './controllers/product';
+import { createProduct, retrieveProduct, updateProduct, deleteProduct, countProduct, listProduct,LoadProduct } from './controllers/product';
 import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge } from './controllers/charge';
 
 export function routesCustomer(app: Application) {
@@ -41,6 +41,8 @@ export function routesProduct(app: Application) {
     app.delete('/api/products/:id', deleteProduct);
     app.get('/api/count/products', countProduct);
     app.get('/api/page/products/:page/:limit', listProduct);
+    app.get('/api/load/products', LoadProduct);
+
 }
 
 

@@ -72,6 +72,14 @@ export async function countProduct(req: Request, res: Response) {
     }
 }
 
+export async function LoadProduct(req: Request, res: Response) {       
+    try {
+        let snapshot = await db.collection(collection).orderBy('name').get();
+        return res.status(200).json(snapshot.docs.map(doc => Product(doc.data(), doc.id)));        
+    } catch (err) {
+        return handleError(res, err);
+    }       
+};
 
 function handleError(res: Response, err: any) {
     return res.status(500).send({ message: `${err.code} - ${err.message}` });
