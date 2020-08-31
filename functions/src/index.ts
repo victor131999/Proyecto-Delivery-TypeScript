@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import { routesCustomer,routesMotorized,routesLocal,routesProduct, routesCharge } from './router';
+import { routesCustomer,routesMotorized,routesLocal,routesProduct, routesCharge,routesAuth } from './router';
 
 //inicualizacion de la aplicacion para produccion o de forma loca(el codigo comentado es para trabajar de forma local)
 admin.initializeApp(functions.config().firebase);
@@ -30,6 +30,7 @@ routesMotorized(server);
 routesLocal(server);
 routesProduct(server);
 routesCharge(server);
+routesAuth(server);
 
 export const api = functions.https.onRequest(server);
 export { db };//exportacion de la base de datos

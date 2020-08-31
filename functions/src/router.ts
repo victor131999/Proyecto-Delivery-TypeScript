@@ -4,6 +4,7 @@ import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, c
 import { createLocal, retrieveLocal, updateLocal, deleteLocal, countLocal, listLocal } from './controllers/local';
 import { createProduct, retrieveProduct, updateProduct, deleteProduct, countProduct, listProduct,LoadProduct } from './controllers/product';
 import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge } from './controllers/charge';
+import { signUp } from './controllers/auth';
 
 export function routesCustomer(app: Application) {
     app.post('/api/customers', createCustomer);
@@ -53,4 +54,8 @@ export function routesCharge(app: Application) {
     app.delete('/api/charges/:id', deleteCharge);
     app.get('/api/count/charges', countCharge);
     app.get('/api/page/charges/:page/:limit', listCharge);
+}
+
+export function routesAuth(app: Application) {
+    app.post('/api/auth/signup', signUp);    
 }
