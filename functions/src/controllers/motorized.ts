@@ -7,7 +7,8 @@ const collection = "motorizeds";
 
 export async function createMotorized(req: Request, res: Response) {           
     try{            
-        const newMotorized = Motorized(req.body);
+        const { email } = res.locals;       
+        const newMotorized = Motorized(req.body, undefined, email);
         const motorizedAdded = await db.collection(collection).add(newMotorized);                            
         return res.status(201).json(Message('Motorizado agregada', `Motorizado fue agregada con el id ${motorizedAdded.id}`, 'success'));
     }

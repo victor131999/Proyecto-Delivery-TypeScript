@@ -6,8 +6,9 @@ import { Message } from "../models/message";
 const collection = "locals";
 
 export async function createLocal(req: Request, res: Response) {           
-    try{            
-        const newlocal = Local(req.body);
+    try{       
+        const { email } = res.locals;       
+        const newlocal = Local(req.body, undefined, email);
         const localAdded = await db.collection(collection).add(newlocal);                            
         return res.status(201).json(Message('Local agregada', `Local fue agregada con el id ${localAdded.id}`, 'success'));
     }

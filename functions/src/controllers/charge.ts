@@ -8,8 +8,9 @@ import { Customer } from "../models/customer";
 const collection = "charges";
 
 export async function createCharge(req:Request, res: Response){         
-    try{            
-        const newcharge = Charge(req.body);
+    try{     
+        const { email } = res.locals;        
+        const newcharge = Charge(req.body, undefined, email);
         const motorized = await db.collection('motorizeds').doc(req.body['idmotorized']).get();
 
         newcharge.motorized = Motorized(motorized.data());

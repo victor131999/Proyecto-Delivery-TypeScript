@@ -13,10 +13,12 @@ export interface Charge {
     idmotorized: string,
     customer?: Customer,
     motorized?: Motorized,
-    details:Array<Detail>
+    details:Array<Detail>,
+    created_by? : string,
+    created_at : string
    
 }
-export function Charge(data:any,id?:string){
+export function Charge(data:any,id?:string, username? : string){
     const {total,description,state,idcustomer, idmotorized, customer, motorized,details}=data
     let object :Charge={
         idcharge:id,
@@ -28,7 +30,9 @@ export function Charge(data:any,id?:string){
         idmotorized: idmotorized,
         customer: customer,
         motorized: motorized,
-        details:details
+        details:details,
+        created_by : username,
+        created_at : new Date().toUTCString()
         
     };
     return object;

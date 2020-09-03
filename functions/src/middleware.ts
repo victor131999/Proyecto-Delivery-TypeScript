@@ -31,7 +31,7 @@ export async function isAuthenticated(req: Request, res: Response, next: Functio
     }
 }
 
-export function isAuthorized(opts: { hasRole: Array<'admin' | 'teacher' | 'student'>}) {
+export function isAuthorized(opts: { hasRole: Array<'admin' | 'customer' | 'userlocal'| 'usermotorized'>}) {
     return (req: Request, res: Response, next: Function) => {
         const { role } = res.locals
 

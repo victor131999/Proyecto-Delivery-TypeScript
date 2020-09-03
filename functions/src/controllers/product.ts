@@ -7,7 +7,8 @@ const collection = "products";
 
 export async function createProduct(req: Request, res: Response) {           
     try{            
-        const newproduct = Product(req.body);
+        const { email } = res.locals;       
+        const newproduct = Product(req.body, undefined, email);
         const productAdded = await db.collection(collection).add(newproduct);                            
         return res.status(201).json(Message('Producto agregada', `Producto fue agregada con el id ${productAdded.id}`, 'success'));
     }
