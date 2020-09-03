@@ -92,6 +92,16 @@ export async function listCustomerCharge(req:Request, res: Response){
     }
 }
 
+export async function countChargesCustomer(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idcustomer','==', id).get();   
+        return res.status(200).json(snapshot.size ); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+
 function handleError(res: Response, err: any) {
     return res.status(500).send({ message: `${err.code} - ${err.message}` });
 }

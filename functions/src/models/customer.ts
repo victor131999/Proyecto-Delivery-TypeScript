@@ -5,10 +5,12 @@ export interface Customer {
     direction : string,
     identy : string,
     active : string,
-    phone : string
+    phone : string,
+    created_by? : string,
+    created_at : string
 }
 
-export function Customer( data: any,id?:string){
+export function Customer( data: any,id?:string, username? : string){
     const { name, direction, identy, active,phone } = data;
     let object:Customer={
         idcustomer: id,
@@ -17,6 +19,8 @@ export function Customer( data: any,id?:string){
         identy:identy,
         active:active,
         phone:phone,
+        created_by : username,
+        created_at : new Date().toUTCString()
     };
     return object;
 }

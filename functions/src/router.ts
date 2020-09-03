@@ -3,14 +3,15 @@ import { createCustomer, retrieveCustomer, updateCustomer, deleteCustomer, count
 import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, countMotorized, listMotorized,ComboMotorized } from './controllers/motorized';
 import { createLocal, retrieveLocal, updateLocal, deleteLocal, countLocal, listLocal } from './controllers/local';
 import { createProduct, retrieveProduct, updateProduct, deleteProduct, countProduct, listProduct,LoadProduct } from './controllers/product';
-import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge } from './controllers/charge';
+import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge,countChargesCustomer } from './controllers/charge';
 import { signUp } from './controllers/auth';
+import { isAuthenticated, isAuthorized } from './middleware';
 
 export function routesCustomer(app: Application) {
     app.post('/api/customers', createCustomer);
     app.get('/api/customers/:id', retrieveCustomer);
     app.put('/api/customers/:id', updateCustomer);
-    app.delete('/api/customers/:id', deleteCustomer);
+    app.delete('/api/customers/:id',[ isAuthenticated, isAuthorized({ hasRole: ['admin'] }), deleteCustomer ]);
     app.get('/api/count/customers', countCustomer);
     app.get('/api/page/customers/:page/:limit', listCustomer);
     app.get('/api/customers', ComboCustomer);
@@ -54,6 +55,7 @@ export function routesCharge(app: Application) {
     app.delete('/api/charges/:id', deleteCharge);
     app.get('/api/count/charges', countCharge);
     app.get('/api/page/charges/:page/:limit', listCharge);
+    app.get('/api/charges/count/customer/:id',countChargesCustomer);
 }
 
 export function routesAuth(app: Application) {

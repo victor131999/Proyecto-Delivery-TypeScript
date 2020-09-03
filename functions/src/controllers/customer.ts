@@ -8,8 +8,9 @@ const collection = "customers";
 
 
 export async function createCustomer(req: Request, res: Response) {           
-    try{            
-        const newcustomer = Customer(req.body);
+    try{   
+        const { email } = res.locals;         
+        const newcustomer = Customer(req.body, undefined, email);
         const customerAdded = await db.collection(collection).add(newcustomer);                            
         return res.status(201).json(Message('Cliente agregada', `Cliente fue agregada con el id ${customerAdded.id}`, 'success'));
     }
