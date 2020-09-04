@@ -92,16 +92,57 @@ export async function listCustomerCharge(req:Request, res: Response){
         return handleError(res, err);
     }
 }
-
-export async function countChargesCustomer(req:Request, res: Response){ 
+//Graficas
+export async function countChargesCustomer1(req:Request, res: Response){ 
     try{
         let id = req.params.id;
         let snapshot = await db.collection(collection).where('idcustomer','==', id).get();   
-        return res.status(200).json(snapshot.size ); 
+        return res.status(200).json({ numberDocs1 : snapshot.size }); 
     }catch(err){
         return handleError(res, err);
     }
 }
+
+export async function countChargesCustomer2(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idcustomer','==', id).get();   
+        return res.status(200).json({ numberDocs2 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+
+export async function countChargesCustomer3(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idcustomer','==', id).get();   
+        return res.status(200).json({ numberDocs3 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+
+export async function countChargesCustomer4(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idcustomer','==', id).get();   
+        return res.status(200).json({ numberDocs4 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+
+export async function countChargesCustomer5(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idcustomer','==', id).get();   
+        return res.status(200).json({ numberDocs5 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+
 
 function handleError(res: Response, err: any) {
     return res.status(500).send({ message: `${err.code} - ${err.message}` });
