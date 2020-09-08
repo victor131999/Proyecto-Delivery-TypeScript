@@ -82,6 +82,74 @@ export async function ComboMotorized(req: Request, res: Response){
         return handleError(res, err);
     }
 }
+//-----------------------------------------------------------------------------------------------
+//--------------Gráfica-----------------------------------------------------
+export async function Ordersplaced1(req:Request, res: Response){ 
+    try{
+        const doc = await db.collection(collection).doc(req.params.id).get();        
+        if(!doc) {
+            return res.status(404).json(Message('Motorizado no encontrada', `Motorizado con el id ${req.params.id} no encontrada`, 'warning'));               
+        }        
+        return res.status(200).json({numberDocs1:Motorized(doc.data()).Ordersplaced});
+    }
+    catch(err){
+        return handleError(res, err);
+    }    
+
+}
+
+export async function Ordersplaced2(req:Request, res: Response){ 
+    try{
+        const doc = await db.collection(collection).doc(req.params.id).get();        
+        if(!doc) {
+            return res.status(404).json(Message('Motorizado no encontrada', `Motorizado con el id ${req.params.id} no encontrada`, 'warning'));               
+        }        
+        return res.status(200).json({numberDocs2:Motorized(doc.data()).Ordersplaced});
+    }
+    catch(err){
+        return handleError(res, err);
+    }    
+
+}
+export async function Ordersplaced3(req:Request, res: Response){ 
+    try{
+        const doc = await db.collection(collection).doc(req.params.id).get();        
+        if(!doc) {
+            return res.status(404).json(Message('Motorizado no encontrada', `Motorizado con el id ${req.params.id} no encontrada`, 'warning'));               
+        }        
+        return res.status(200).json({numberDocs3:Motorized(doc.data()).Ordersplaced});
+    }
+    catch(err){
+        return handleError(res, err);
+    }    
+
+}
+export async function Ordersplaced4(req:Request, res: Response){ 
+    try{
+        const doc = await db.collection(collection).doc(req.params.id).get();        
+        if(!doc) {
+            return res.status(404).json(Message('Motorizado no encontrada', `Motorizado con el id ${req.params.id} no encontrada`, 'warning'));               
+        }        
+        return res.status(200).json({numberDocs4:Motorized(doc.data()).Ordersplaced});
+    }
+    catch(err){
+        return handleError(res, err);
+    }    
+
+}
+export async function Ordersplaced5(req:Request, res: Response){ 
+    try{
+        const doc = await db.collection(collection).doc(req.params.id).get();        
+        if(!doc) {
+            return res.status(404).json(Message('Motorizado no encontrada', `Motorizado con el id ${req.params.id} no encontrada`, 'warning'));               
+        }        
+        return res.status(200).json({numberDocs5:Motorized(doc.data()).Ordersplaced});
+    }
+    catch(err){
+        return handleError(res, err);
+    }    
+
+}
 
 function handleError(res: Response, err: any) {
     return res.status(500).send({ message: `${err.code} - ${err.message}` });

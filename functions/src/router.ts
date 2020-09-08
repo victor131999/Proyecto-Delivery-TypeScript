@@ -1,6 +1,6 @@
 import {Application} from 'express';
 import { createCustomer, retrieveCustomer, updateCustomer, deleteCustomer, countCustomer, listCustomer,ComboCustomer } from './controllers/customer';
-import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, countMotorized, listMotorized,ComboMotorized } from './controllers/motorized';
+import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, countMotorized, listMotorized,ComboMotorized,Ordersplaced1,Ordersplaced2,Ordersplaced3,Ordersplaced4,Ordersplaced5 } from './controllers/motorized';
 import { createLocal, retrieveLocal, updateLocal, deleteLocal, countLocal, listLocal } from './controllers/local';
 import { createProduct, retrieveProduct, updateProduct, deleteProduct, countProduct, listProduct,LoadProduct } from './controllers/product';
 import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge,countChargesCustomer1,countChargesCustomer2,countChargesCustomer3,countChargesCustomer4,countChargesCustomer5 } from './controllers/charge';
@@ -25,6 +25,11 @@ export function routesMotorized(app: Application) {
     app.get('/api/count/motorizeds', countMotorized);
     app.get('/api/page/motorizeds/:page/:limit',[ isAuthenticated, isAuthorized({ hasRole: ['admin'] }), listMotorized ]);
     app.get('/api/motorizeds', ComboMotorized);
+    app.get('/api/motorized/ordersplaced1/:id',Ordersplaced1);
+    app.get('/api/motorized/ordersplaced2/:id',Ordersplaced2);
+    app.get('/api/motorized/ordersplaced3/:id',Ordersplaced3);
+    app.get('/api/motorized/ordersplaced4/:id',Ordersplaced4);
+    app.get('/api/motorized/ordersplaced5/:id',Ordersplaced5);
 }
 
 export function routesLocal(app: Application) {
