@@ -4,6 +4,7 @@ import { db } from "../index";
 import { Message } from "../models/message";
 import { Motorized} from "../models/motorized";
 import { Customer } from "../models/customer";
+import { Local } from "../models/local";
 
 const collection = "charges";
 
@@ -11,12 +12,16 @@ export async function createCharge(req:Request, res: Response){
     try{     
         const { email } = res.locals;        
         const newcharge = Charge(req.body, undefined, email);
+
         const motorized = await db.collection('motorizeds').doc(req.body['idmotorized']).get();
-
         newcharge.motorized = Motorized(motorized.data());
-        const customer = await db.collection('customers').doc(req.body['idcustomer']).get();
 
+        const customer = await db.collection('customers').doc(req.body['idcustomer']).get();
         newcharge.customer = Customer(customer.data());
+
+        const local = await db.collection('locals').doc(req.body['idlocal']).get();
+        newcharge.local = Local(local.data());
+
         console.log('creando nueva charge');
    
         const id = (await db.collection(collection).add(newcharge)).id
@@ -93,6 +98,7 @@ export async function listCustomerCharge(req:Request, res: Response){
     }
 }
 //Graficas
+//--------------------------------Contador de ordenes por clientes potenciales-----------------------------------
 export async function countChargesCustomer1(req:Request, res: Response){ 
     try{
         let id = req.params.id;
@@ -143,6 +149,43 @@ export async function countChargesCustomer5(req:Request, res: Response){
     }
 }
 
+//------------------------------Contador de ordenes que pertenecen a locales-----------------
+export async function countChargesLocal1(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idlocal','==', id).get();   
+        return res.status(200).json({ numberDocsLocal1 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+export async function countChargesLocal2(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idlocal','==', id).get();   
+        return res.status(200).json({ numberDocsLocal2 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+export async function countChargesLocal3(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idlocal','==', id).get();   
+        return res.status(200).json({ numberDocsLocal3 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
+export async function countChargesLocal4(req:Request, res: Response){ 
+    try{
+        let id = req.params.id;
+        let snapshot = await db.collection(collection).where('idlocal','==', id).get();   
+        return res.status(200).json({ numberDocsLocal4 : snapshot.size }); 
+    }catch(err){
+        return handleError(res, err);
+    }
+}
 
 function handleError(res: Response, err: any) {
     return res.status(500).send({ message: `${err.code} - ${err.message}` });

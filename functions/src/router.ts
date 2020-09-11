@@ -1,9 +1,9 @@
 import {Application} from 'express';
 import { createCustomer, retrieveCustomer, updateCustomer, deleteCustomer, countCustomer, listCustomer,ComboCustomer } from './controllers/customer';
 import { createMotorized, retrieveMotorized, updateMotorized, deleteMotorized, countMotorized, listMotorized,ComboMotorized,Ordersplaced1,Ordersplaced2,Ordersplaced3,Ordersplaced4,Ordersplaced5 } from './controllers/motorized';
-import { createLocal, retrieveLocal, updateLocal, deleteLocal, countLocal, listLocal } from './controllers/local';
+import { createLocal, retrieveLocal, updateLocal, deleteLocal, countLocal, listLocal,ComboLocal } from './controllers/local';
 import { createProduct, retrieveProduct, updateProduct, deleteProduct, countProduct, listProduct,LoadProduct } from './controllers/product';
-import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge,countChargesCustomer1,countChargesCustomer2,countChargesCustomer3,countChargesCustomer4,countChargesCustomer5 } from './controllers/charge';
+import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, listCharge,countChargesCustomer1,countChargesCustomer2,countChargesCustomer3,countChargesCustomer4,countChargesCustomer5,countChargesLocal1,countChargesLocal2,countChargesLocal3,countChargesLocal4 } from './controllers/charge';
 import { signUp } from './controllers/auth';
 import { isAuthenticated, isAuthorized } from './middleware';
 
@@ -39,6 +39,7 @@ export function routesLocal(app: Application) {
     app.delete('/api/locals/:id', deleteLocal);
     app.get('/api/count/locals', countLocal);
     app.get('/api/page/locals/:page/:limit',[ isAuthenticated, isAuthorized({ hasRole: ['admin'] }), listLocal]);
+    app.get('/api/locals', ComboLocal);
 }
 
 export function routesProduct(app: Application) {
@@ -65,6 +66,10 @@ export function routesCharge(app: Application) {
     app.get('/api/charges/count/customer3/:id',countChargesCustomer3);
     app.get('/api/charges/count/customer4/:id',countChargesCustomer4);
     app.get('/api/charges/count/customer5/:id',countChargesCustomer5);
+    app.get('/api/charges/count/local1/:id',countChargesLocal1);
+    app.get('/api/charges/count/local2/:id',countChargesLocal2);
+    app.get('/api/charges/count/local3/:id',countChargesLocal3);
+    app.get('/api/charges/count/local4/:id',countChargesLocal4);
 }
 
 export function routesAuth(app: Application) {

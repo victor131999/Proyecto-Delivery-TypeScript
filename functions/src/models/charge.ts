@@ -1,6 +1,7 @@
 
 import { Customer } from "./customer";
 import { Motorized } from "./motorized";
+import { Local } from "./local";
 import { Detail } from "./detail";
 //------------------------------Modelo de charge----------------------------------------//
 export interface Charge {
@@ -13,13 +14,15 @@ export interface Charge {
     idmotorized: string,
     customer?: Customer,
     motorized?: Motorized,
+    idlocal:string,
+    local?:Local,
     details:Array<Detail>,
     created_by? : string,
     created_at : string
    
 }
 export function Charge(data:any,id?:string, username? : string){
-    const {total,description,state,idcustomer, idmotorized, customer, motorized,details}=data
+    const {total,description,state,idcustomer, idmotorized,idlocal, customer, motorized,local,details}=data
     let object :Charge={
         idcharge:id,
         total:total,
@@ -30,6 +33,8 @@ export function Charge(data:any,id?:string, username? : string){
         idmotorized: idmotorized,
         customer: customer,
         motorized: motorized,
+        idlocal:idlocal,
+        local:local,
         details:details,
         created_by : username,
         created_at : new Date().toUTCString()
