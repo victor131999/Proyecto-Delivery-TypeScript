@@ -7,6 +7,14 @@ import { createCharge, retrieveCharge, updateCharge, deleteCharge, countCharge, 
 import { signUp } from './controllers/auth';
 import { isAuthenticated, isAuthorized } from './middleware';
 
+
+import { createFood, retrieveFood, updateFood, deleteFood, countFood, listFood,/*ComboFood*/ } from './controllers/food';
+import { createReservation } from './controllers/reservation';
+import { createReport } from './controllers/report_food';
+import { createDrink,updateDrink,retrieveDrink,countDrink,deleteDrink,listDrink } from './controllers/drink';
+import { createCombo,updateCombo,retrieveCombo,countCombo,deleteCombo,listCombo } from './controllers/combo';
+
+
 export function routesCustomer(app: Application) {
     app.post('/api/customers', createCustomer);
     app.get('/api/customers/:id', retrieveCustomer);
@@ -70,6 +78,46 @@ export function routesCharge(app: Application) {
     app.get('/api/charges/count/local2/:id',countChargesLocal2);
     app.get('/api/charges/count/local3/:id',countChargesLocal3);
     app.get('/api/charges/count/local4/:id',countChargesLocal4);
+}
+
+
+
+export function routesFood(app: Application) {
+    app.post('/api/foods', createFood );
+    app.get('/api/foods/:id', retrieveFood);
+    app.put('/api/foods/:id', updateFood);
+    app.delete('/api/foods/:id', deleteFood);
+    app.get('/api/count/foods', countFood);
+    app.get('/api/page/foods/:page/:limit',listFood);
+    //app.get('/api/foods', ComboFood);
+}
+
+export function routesDrink(app: Application) {
+    app.post('/api/drinks', createDrink );
+    app.get('/api/drinks/:id', retrieveDrink);
+    app.put('/api/drinks/:id', updateDrink);
+    app.delete('/api/drinks/:id', deleteDrink);
+    app.get('/api/count/drinks', countDrink);
+    app.get('/api/page/drinks/:page/:limit',listDrink);
+    //app.get('/api/foods', ComboFood);
+}
+
+export function routesCombo(app: Application) {
+    app.post('/api/combos', createCombo );
+    app.get('/api/combos/:id', retrieveCombo);
+    app.put('/api/combos/:id', updateCombo);
+    app.delete('/api/combos/:id', deleteCombo);
+    app.get('/api/count/combos', countCombo);
+    app.get('/api/page/combos/:page/:limit',listCombo);
+    //app.get('/api/foods', ComboFood);
+}
+
+export function routesReservationFood(app: Application) {
+    app.post('/api/reservations', createReservation );
+}
+
+export function routesReportFood(app: Application) {
+    app.post('/api/reports', createReport );
 }
 
 export function routesAuth(app: Application) {
