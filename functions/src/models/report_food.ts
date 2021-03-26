@@ -13,7 +13,7 @@ export function Report(data :any, id?: string){
     let object :Report = { 
         idreport: id,        
         date: new Date().toUTCString(),
-        user: "test",
+        user: data.user,
         type : data.type,
         image: data.image,
         message: data.message
